@@ -1,15 +1,19 @@
 import React from 'react';
+import styled from 'styled-components';
 import NavBar from './components/NavBar';
+import ItemListContainer from './components/ItemListContainer';
+
+const AppContainer = styled.div`
+  min-height: 100vh;
+  background-color: #ffffff;
+`;
 
 const App = () => {
   return (
-    <div>
+    <AppContainer>
       <NavBar />
-      <main>
-        <h1>Bem-vindo à Minha Loja</h1>
-        <p>Escolha uma categoria acima para explorar nossos produtos!</p>
-      </main>
-    </div>
+      <ItemListContainer greeting="Bem-vindo à Virtual Tavares! Confira nossos produtos." />
+    </AppContainer>
   );
 };
 
