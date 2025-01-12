@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import ItemCount from './ItemCount';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import ItemList from "./ItemList";
 
 const Container = styled.div`
   margin-top: 80px;
@@ -35,16 +35,53 @@ const Content = styled.div`
   }
 `;
 
+const mockProducts = [
+    {
+      id: 1,
+      title: "Produto A",
+      price: 99.99,
+      pictureUrl: "https://picsum.photos/200/300?random=1",
+      stock: 10, // Adicionando o estoque
+    },
+    {
+      id: 2,
+      title: "Produto B",
+      price: 149.99,
+      pictureUrl: "https://picsum.photos/200/300?random=2",
+      stock: 5, // Adicionando o estoque
+    },
+    {
+      id: 3,
+      title: "Produto C",
+      price: 199.99,
+      pictureUrl: "https://picsum.photos/200/300?random=3",
+      stock: 8, // Adicionando o estoque
+    },
+  ];
 const ItemListContainer = ({ greeting }) => {
-  const handleAdd = (quantity) => {
-    console.log(`Adicionado ao carrinho: ${quantity} itens`);
-  };
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = () => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(mockProducts);
+        }, 2000);
+      });
+    };
+
+    fetchProducts().then((data) => {
+      setItems(data);
+      setLoading(false);
+    });
+  }, []);
 
   return (
     <Container>
       <Content>
         <h2>{greeting}</h2>
-        <ItemCount stock={5} initial={1} onAdd={handleAdd} />
+        {loading ? <p>Carregando produtos...</p> : <ItemList items={items} />}
       </Content>
     </Container>
   );
