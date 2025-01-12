@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import ItemCount from './ItemCount';
 
 const Container = styled.div`
   margin-top: 80px;
@@ -19,7 +20,7 @@ const Container = styled.div`
 const Content = styled.div`
   background-color: #f5f5f5;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 2rem;
   text-align: center;
 
@@ -35,10 +36,15 @@ const Content = styled.div`
 `;
 
 const ItemListContainer = ({ greeting }) => {
+  const handleAdd = (quantity) => {
+    console.log(`Adicionado ao carrinho: ${quantity} itens`);
+  };
+
   return (
     <Container>
       <Content>
         <h2>{greeting}</h2>
+        <ItemCount stock={5} initial={1} onAdd={handleAdd} />
       </Content>
     </Container>
   );
