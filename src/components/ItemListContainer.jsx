@@ -58,33 +58,37 @@ const mockProducts = [
       stock: 8, // Adicionando o estoque
     },
   ];
-const ItemListContainer = ({ greeting }) => {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProducts = () => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(mockProducts);
-        }, 2000);
+  const ItemListContainer = ({ greeting, onItemSelect }) => {
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+      const fetchProducts = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(mockProducts);
+          }, 2000);
+        });
+      };
+  
+      fetchProducts().then((data) => {
+        setItems(data);
+        setLoading(false);
       });
-    };
-
-    fetchProducts().then((data) => {
-      setItems(data);
-      setLoading(false);
-    });
-  }, []);
-
-  return (
-    <Container>
-      <Content>
-        <h2>{greeting}</h2>
-        {loading ? <p>Carregando produtos...</p> : <ItemList items={items} />}
-      </Content>
-    </Container>
-  );
-};
+    }, []);
+  
+    return (
+      <Container>
+        <Content>
+          <h2>{greeting}</h2>
+          {loading ? (
+            <p>Carregando produtos...</p>
+          ) : (
+            <ItemList items={items} onItemSelect={onItemSelect} />
+          )}
+        </Content>
+      </Container>
+    );
+  };
 
 export default ItemListContainer;
