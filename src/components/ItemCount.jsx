@@ -1,85 +1,126 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const CountContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  background-color: #f5f5f5;
-  padding: 1rem;
+const CounterContainer = styled.div`
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 200px;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
 `;
 
-const CountDisplay = styled.div`
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-`;
-
-const ButtonContainer = styled.div`
+const CounterControls = styled.div`
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  background-color: #f8fafc;
+  border-radius: 6px;
+  padding: 0.25rem;
 `;
 
-const Button = styled.button`
+const QuantityDisplay = styled.div`
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
   padding: 0.5rem 1rem;
-  font-size: 1rem;
-  background-color: ${({ disabled }) => (disabled ? '#ccc' : '#ffcc00')};
-  color: ${({ disabled }) => (disabled ? '#666' : '#333')};
+  min-width: 60px;
+  text-align: center;
+  font-weight: 600;
+  color: #2d3748;
+`;
+
+const CounterButton = styled.button`
+  background-color: #3b82f6;
+  color: white;
   border: none;
   border-radius: 4px;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  transition: background-color 0.3s;
+  width: 32px;
+  height: 32px;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
 
-  &:hover {
-    background-color: ${({ disabled }) => (disabled ? '#ccc' : '#ffaa00')};
+  &:hover:not(:disabled) {
+    background-color: #2563eb;
+  }
+
+  &:disabled {
+    background-color: #cbd5e1;
+    cursor: not-allowed;
   }
 `;
 
-const AddToCartButton = styled(Button)`
-  background-color: #4caf50;
+const AddButton = styled.button`
+  width: 100%;
+  background-color: #22c55e;
   color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
 
-  &:hover {
-    background-color: #45a049;
+  &:hover:not(:disabled) {
+    background-color: #16a34a;
+  }
+
+  &:disabled {
+    background-color: #cbd5e1;
+    cursor: not-allowed;
   }
 `;
 
-const ItemCount = ({ stock, initial, onAdd }) => {
+const ItemCount = ({ stock, initial = 1, onAdd }) => {
   const [count, setCount] = useState(initial);
 
   const handleIncrease = () => {
-    if (count < stock) setCount(count + 1);
-  };
-
-  const handleDecrease = () => {
-    if (count > 1) setCount(count - 1);
-  };
-
-  const handleAddToCart = () => {
-    if (stock > 0 && count > 0) {
-      onAdd(count);
+    if (count < stock) {
+      setCount(prev => prev + 1);
     }
   };
 
+  const handleDecrease = () => {
+    if (count > 1) {
+      setCount(prev => prev - 1);
+    }
+  };
+
+  const handleAddToCart = () => {
+    onAdd(count);
+  };
+
   return (
-    <CountContainer>
-      <CountDisplay>{count}</CountDisplay>
-      <ButtonContainer>
-        <Button onClick={handleDecrease} disabled={count <= 1}>
+    <CounterContainer>
+      <CounterControls>
+        <CounterButton 
+          onClick={handleDecrease} 
+          disabled={count <= 1}
+          aria-label="Diminuir quantidade"
+        >
           -
-        </Button>
-        <Button onClick={handleIncrease} disabled={count >= stock}>
+        </CounterButton>
+        <QuantityDisplay>{count}</QuantityDisplay>
+        <CounterButton 
+          onClick={handleIncrease} 
+          disabled={count >= stock}
+          aria-label="Aumentar quantidade"
+        >
           +
-        </Button>
-      </ButtonContainer>
-      <AddToCartButton onClick={handleAddToCart} disabled={stock <= 0}>
+        </CounterButton>
+      </CounterControls>
+      <AddButton 
+        onClick={handleAddToCart} 
+        disabled={stock <= 0}
+      >
         Adicionar ao Carrinho
-      </AddToCartButton>
-    </CountContainer>
+      </AddButton>
+    </CounterContainer>
   );
 };
 

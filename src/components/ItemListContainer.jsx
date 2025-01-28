@@ -4,13 +4,12 @@ import ItemList from "./ItemList";
 import { useParams } from 'react-router-dom';
 
 const Container = styled.div`
-  margin-top: 80px;
-  padding: 2rem;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
   width: 100%;
-  box-sizing: border-box;
+  padding: 2rem;
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   @media (max-width: 768px) {
     margin-top: 70px;
@@ -19,21 +18,12 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 1400px;
+  background-color: #d4d5d5;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 2rem;
-  text-align: center;
-
-  h2 {
-    color: #333;
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-
-    @media (max-width: 768px) {
-      font-size: 1.4rem;
-    }
-  }
 `;
 
 const mockProducts = [

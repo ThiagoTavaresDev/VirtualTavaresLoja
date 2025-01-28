@@ -7,7 +7,7 @@ const DetailContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  background-color: white;
+  background-color: #d4d5d5;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 800px;
