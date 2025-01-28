@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import CartWidget from './CartWidget';
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Nav = styled.nav`
   background-color: #333;
@@ -19,7 +20,7 @@ const Nav = styled.nav`
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 `;
 
-const Brand = styled.a`
+const Brand = styled(Link)`
   font-size: 1.5rem;
   text-decoration: none;
   color: white;
@@ -92,32 +93,27 @@ const NavContainer = styled.div`
   }
 `;
 
-const NavBar = () => {
+const NavBar = ({ categories }) => {
   const [isOpen, setIsOpen] = useState(false);
-
   return (
     <Nav>
-      <Brand href="#">Virtual Tavares</Brand>
-      <NavContainer>
-        <MenuButton onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </MenuButton>
-        <NavList isOpen={isOpen}>
-          <NavItem>
-            <a href="#categoria1">Categoria 1</a>
+    <Brand to="/">Virtual Tavares</Brand>
+    <NavContainer>
+      <MenuButton onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? <X size={24} /> : <Menu size={24} />}
+      </MenuButton>
+      <NavList isOpen={isOpen}>
+        {categories.map(category => (
+          <NavItem key={category.id}>
+            <Link to={`/category/${category.id}`}>{category.name}</Link>
           </NavItem>
-          <NavItem>
-            <a href="#categoria2">Categoria 2</a>
-          </NavItem>
-          <NavItem>
-            <a href="#categoria3">Categoria 3</a>
-          </NavItem>
-          <NavItem>
-            <CartWidget />
-          </NavItem>
-        </NavList>
-      </NavContainer>
-    </Nav>
+        ))}
+        <NavItem>
+          <CartWidget />
+        </NavItem>
+      </NavList>
+    </NavContainer>
+  </Nav>
   );
 };
 

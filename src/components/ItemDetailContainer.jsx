@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import ItemDetail from './ItemDetail';
 
@@ -24,7 +25,20 @@ const LoadingMessage = styled.div`
   color: #666;
 `;
 
-// Mock products data
+const BackButton = styled.button`
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    background-color: #444;
+  }
+`;
+
+// Mock products data - agora com descrições completas
 const mockProducts = [
   {
     id: 1,
@@ -32,7 +46,8 @@ const mockProducts = [
     price: 99.99,
     pictureUrl: "https://picsum.photos/400/400?random=1",
     description: "Este é um produto de alta qualidade com características únicas. Fabricado com os melhores materiais, oferece durabilidade excepcional e design moderno.",
-    stock: 10
+    stock: 10,
+    category: "electronics"
   },
   {
     id: 2,
@@ -40,7 +55,8 @@ const mockProducts = [
     price: 149.99,
     pictureUrl: "https://picsum.photos/400/400?random=2",
     description: "Um produto versátil e inovador que atende às suas necessidades. Possui acabamento premium e tecnologia de ponta.",
-    stock: 5
+    stock: 5,
+    category: "electronics"
   },
   {
     id: 3,
@@ -48,11 +64,14 @@ const mockProducts = [
     price: 199.99,
     pictureUrl: "https://picsum.photos/400/400?random=3",
     description: "O melhor da categoria, com recursos exclusivos e performance superior. Ideal para quem busca excelência.",
-    stock: 8
+    stock: 8,
+    category: "electronics"
   }
 ];
 
-const ItemDetailContainer = ({ itemId, onBack }) => {
+const ItemDetailContainer = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -60,12 +79,13 @@ const ItemDetailContainer = ({ itemId, onBack }) => {
     const getItem = () => {
       return new Promise((resolve) => {
         setTimeout(() => {
-          const foundItem = mockProducts.find(p => p.id === itemId);
+          const foundItem = mockProducts.find(p => p.id === parseInt(id));
           resolve(foundItem);
         }, 2000);
       });
     };
 
+    setLoading(true);
     getItem()
       .then(response => {
         setItem(response);
@@ -75,29 +95,33 @@ const ItemDetailContainer = ({ itemId, onBack }) => {
         console.error("Erro ao carregar o item:", error);
         setLoading(false);
       });
-  }, [itemId]);
+  }, [id]);
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  if (loading) {
+    return (
+      <Container>
+        <LoadingMessage>Carregando detalhes do produto...</LoadingMessage>
+      </Container>
+    );
+  }
+
+  if (!item) {
+    return (
+      <Container>
+        <BackButton onClick={handleBack}>← Voltar</BackButton>
+        <LoadingMessage>Produto não encontrado</LoadingMessage>
+      </Container>
+    );
+  }
 
   return (
     <Container>
-      <button 
-        onClick={onBack}
-        style={{
-          marginBottom: '1rem',
-          padding: '0.5rem 1rem',
-          backgroundColor: '#333',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer'
-        }}
-      >
-        ← Voltar
-      </button>
-      {loading ? (
-        <LoadingMessage>Carregando detalhes do produto...</LoadingMessage>
-      ) : (
-        item && <ItemDetail item={item} />
-      )}
+      <BackButton onClick={handleBack}>← Voltar</BackButton>
+      <ItemDetail item={item} />
     </Container>
   );
 };

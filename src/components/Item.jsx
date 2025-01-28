@@ -1,27 +1,35 @@
+
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import ItemCount from './ItemCount';
 
-const Item = ({ item, onSelect }) => {
-    return (
-      <div style={styles.card}>
-        <h3>{item.title}</h3>
-        <img src={item.pictureUrl} alt={item.title} style={styles.image} />
-        <p>Preço: R${item.price}</p>
-        <p>Estoque: {item.stock}</p>
-        <ItemCount 
-          stock={item.stock} 
-          initial={1} 
-          onAdd={(count) => console.log(`Adicionado ${count} ao carrinho`)} 
-        />
-        <button 
-          style={styles.button}
-          onClick={() => onSelect(item.id)}
-        >
-          Ver Detalhes
-        </button>
-      </div>
-    );
+const Item = ({ item }) => {
+  const navigate = useNavigate();
+    
+  const handleDetails = () => {
+    navigate(`/item/${item.id}`);
   };
+
+  return (
+    <div style={styles.card}>
+      <h3>{item.title}</h3>
+      <img src={item.pictureUrl} alt={item.title} style={styles.image} />
+      <p>Preço: R${item.price}</p>
+      <p>Estoque: {item.stock}</p>
+      <ItemCount 
+        stock={item.stock} 
+        initial={1} 
+        onAdd={(count) => console.log(`Adicionado ${count} ao carrinho`)} 
+      />
+      <button 
+        style={styles.button}
+        onClick={handleDetails}
+      >
+        Ver Detalhes
+      </button>
+    </div>
+  );
+};
 
 const styles = {
   card: {

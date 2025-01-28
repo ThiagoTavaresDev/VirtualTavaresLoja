@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ItemList from "./ItemList";
+import { useParams } from 'react-router-dom';
 
 const Container = styled.div`
   margin-top: 80px;
@@ -42,6 +43,7 @@ const mockProducts = [
       price: 99.99,
       pictureUrl: "https://picsum.photos/200/300?random=1",
       stock: 10, // Adicionando o estoque
+      category: "books"
     },
     {
       id: 2,
@@ -49,6 +51,7 @@ const mockProducts = [
       price: 149.99,
       pictureUrl: "https://picsum.photos/200/300?random=2",
       stock: 5, // Adicionando o estoque
+      category: "electronics"
     },
     {
       id: 3,
@@ -56,9 +59,11 @@ const mockProducts = [
       price: 199.99,
       pictureUrl: "https://picsum.photos/200/300?random=3",
       stock: 8, // Adicionando o estoque
+      category: "electronics"
     },
   ];
   const ItemListContainer = ({ greeting, onItemSelect }) => {
+    const { categoryId } = useParams();
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
   
@@ -66,16 +71,23 @@ const mockProducts = [
       const fetchProducts = () => {
         return new Promise((resolve) => {
           setTimeout(() => {
-            resolve(mockProducts);
+            if (categoryId) {
+                const filteredProducts = mockProducts.filter(
+                  product => product.category === categoryId
+                );
+                resolve(filteredProducts);
+              } else {
+                resolve(mockProducts);
+              }
           }, 2000);
         });
       };
-  
+      setLoading(true);
       fetchProducts().then((data) => {
         setItems(data);
         setLoading(false);
       });
-    }, []);
+    }, [categoryId]);
   
     return (
       <Container>
