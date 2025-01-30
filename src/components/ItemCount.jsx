@@ -76,23 +76,25 @@ const AddButton = styled.button`
   }
 `;
 
-const ItemCount = ({ stock, initial = 1, onAdd }) => {
-  const [count, setCount] = useState(initial);
+const ItemCount = ({ stock = 0, initial = 1, onAdd }) => {
+  const [quantity, setQuantity] = useState(Math.min(initial, stock));
 
   const handleIncrease = () => {
-    if (count < stock) {
-      setCount(prev => prev + 1);
+    if (quantity < stock) {
+      setQuantity(prev => prev + 1);
     }
   };
 
   const handleDecrease = () => {
-    if (count > 1) {
-      setCount(prev => prev - 1);
+    if (quantity > 1) {
+      setQuantity(prev => prev - 1);
     }
   };
 
   const handleAddToCart = () => {
-    onAdd(count);
+    if (quantity > 0 && quantity <= stock) {
+      onAdd(quantity);
+    }
   };
 
   return (
@@ -100,15 +102,15 @@ const ItemCount = ({ stock, initial = 1, onAdd }) => {
       <CounterControls>
         <CounterButton 
           onClick={handleDecrease} 
-          disabled={count <= 1}
+          disabled={quantity <= 1}
           aria-label="Diminuir quantidade"
         >
           -
         </CounterButton>
-        <QuantityDisplay>{count}</QuantityDisplay>
+        <QuantityDisplay>{quantity}</QuantityDisplay>
         <CounterButton 
           onClick={handleIncrease} 
-          disabled={count >= stock}
+          disabled={quantity >= stock}
           aria-label="Aumentar quantidade"
         >
           +

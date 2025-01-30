@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import ItemCount from './ItemCount';
 
 const DetailContainer = styled.div`
@@ -58,9 +59,36 @@ const Description = styled.p`
   margin-bottom: 2rem;
 `;
 
+const FinishButton = styled(Link)`
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #218838;
+  }
+`;
+
+const StockInfo = styled.p`
+  color: ${props => props.inStock ? '#28a745' : '#dc3545'};
+  font-weight: 500;
+  margin-bottom: 1rem;
+`;
+
 const ItemDetail = ({ item }) => {
-  const handleAddToCart = (quantity) => {
-    console.log(`Adicionado ${quantity} unidade(s) do produto ${item.title} ao carrinho`);
+  const [quantityAdded, setQuantityAdded] = useState(0);
+
+  const handleOnAdd = (quantity) => {
+    if (quantity > 0 && quantity <= item.stock) {
+      setQuantityAdded(quantity);
+      // Aqui você pode adicionar a lógica para salvar no carrinho
+      console.log(`Adicionado ${quantity} ${quantity === 1 ? 'item' : 'itens'} ao carrinho`);
+    }
   };
 
   return (
@@ -72,11 +100,24 @@ const ItemDetail = ({ item }) => {
         <Title>{item.title}</Title>
         <Price>R$ {item.price.toFixed(2)}</Price>
         <Description>{item.description}</Description>
-        <ItemCount 
-          stock={item.stock} 
-          initial={1} 
-          onAdd={handleAddToCart}
-        />
+        <StockInfo inStock={item.stock > 0}>
+          {item.stock > 0 
+            ? `${item.stock} unidades disponíveis`
+            : 'Produto indisponível'
+          }
+        </StockInfo>
+        
+        {quantityAdded === 0 ? (
+          <ItemCount 
+            stock={item.stock} 
+            initial={1} 
+            onAdd={handleOnAdd}
+          />
+        ) : (
+          <FinishButton to="/cart">
+            Terminar compra ({quantityAdded} {quantityAdded === 1 ? 'item' : 'itens'})
+          </FinishButton>
+        )}
       </InfoContainer>
     </DetailContainer>
   );
