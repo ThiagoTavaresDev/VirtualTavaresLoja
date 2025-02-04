@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import ItemCount from './ItemCount';
+import { useCart } from '../context/CartContext';
 
 const DetailContainer = styled.div`
   display: flex;
@@ -82,12 +83,12 @@ const StockInfo = styled.p`
 
 const ItemDetail = ({ item }) => {
   const [quantityAdded, setQuantityAdded] = useState(0);
+  const { addItem, isInCart } = useCart();
 
   const handleOnAdd = (quantity) => {
     if (quantity > 0 && quantity <= item.stock) {
       setQuantityAdded(quantity);
-      // Aqui você pode adicionar a lógica para salvar no carrinho
-      console.log(`Adicionado ${quantity} ${quantity === 1 ? 'item' : 'itens'} ao carrinho`);
+      addItem(item, quantity);
     }
   };
 

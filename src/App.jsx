@@ -5,6 +5,7 @@ import GlobalStyles from './components/GlobalStyles';
 import NavBar from './components/NavBar';
 import ItemListContainer from './components/ItemListContainer';
 import ItemDetailContainer from './components/ItemDetailContainer';
+import { CartProvider } from './context/CartContext';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -28,6 +29,7 @@ const App = () => {
   };
 
   return (
+    <CartProvider>
     <BrowserRouter>
     <GlobalStyles />
       <AppContainer>
@@ -62,6 +64,7 @@ const App = () => {
         </Routes>
       </AppContainer>
     </BrowserRouter>
+    </CartProvider>
   );
 };
 
