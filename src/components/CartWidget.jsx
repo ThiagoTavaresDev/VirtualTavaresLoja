@@ -1,12 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ShoppingCart } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
-const CartContainer = styled.div`
+const CartContainer = styled(Link)`
   position: relative;
   cursor: pointer;
   margin-left: 1rem;
   transition: transform 0.2s;
+  text-decoration: none;
+  display: ${props => props.$hasItems ? 'block' : 'none'};
 
   &:hover {
     transform: scale(1.1);
@@ -32,10 +36,18 @@ const CartCount = styled.span`
 `;
 
 const CartWidget = () => {
+  const { getTotalQuantity } = useCart();
+  const quantity = getTotalQuantity();
+
+  // Se não houver itens, não renderiza o componente
+  if (quantity === 0) {
+    return null;
+  }
+
   return (
-    <CartContainer>
+    <CartContainer to="/cart" $hasItems={true}>
       <ShoppingCart size={24} color="white" />
-      <CartCount>0</CartCount>
+      <CartCount>{quantity}</CartCount>
     </CartContainer>
   );
 };
